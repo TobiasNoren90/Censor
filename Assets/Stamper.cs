@@ -14,6 +14,7 @@ public class Stamper : MonoBehaviour
     bool canClick = false;
     bool dragStamp = false;
     bool hasStamped = false;
+    public bool StampSelected = false;
 
     public GameObject stampSprite;
     GameObject LTextStamp;
@@ -47,8 +48,9 @@ public class Stamper : MonoBehaviour
         {
             case DragStates.Free:
                 {
-                    LTextStamp.GetComponent<Button>().interactable = false;
-                    RTextStamp.GetComponent<Button>().interactable = false;
+                    //LTextStamp.GetComponent<Button>().interactable = false;
+                    //RTextStamp.GetComponent<Button>().interactable = false;
+                    StampSelected = false;
                     gameObject.transform.localScale = stampSize;
                     gameObject.transform.rotation = rotation;
                     currentPos = gameObject.transform.position;
@@ -73,21 +75,12 @@ public class Stamper : MonoBehaviour
 
             case DragStates.Dragged:
                 {
-                    LTextStamp.GetComponent<Button>().interactable = true;
-                    RTextStamp.GetComponent<Button>().interactable = true;
+                    StampSelected = true;
+                    //LTextStamp.GetComponent<Button>().interactable = true;
+                    //RTextStamp.GetComponent<Button>().interactable = true;
                     gameObject.transform.position = mousePos;
                     gameObject.transform.localScale = stampSize * 1.2f;
                     gameObject.transform.rotation = new Quaternion(0.0f, 0.0f, 90.0f, gameObject.transform.rotation.w);
-
-
-                    //if (Input.GetMouseButtonDown(0))
-                    //{
-                    //    Vector3 spawnPos = new Vector3(mousePos.x, mousePos.y, -0.6f);
-                    //    Instantiate(stampSprite, spawnPos, Quaternion.identity);
-                    //    dragState = DragStates.Free;
-                    //}
-
-                    Debug.Log("testpush");
                     
                     break;
                 }
@@ -106,10 +99,12 @@ public class Stamper : MonoBehaviour
 
     public void HasStamped()
     {
-        Vector3 spawnPos = new Vector3(mousePos.x, mousePos.y, -0.6f);
-        Instantiate(stampSprite, spawnPos, Quaternion.identity);
-        hasStamped = true;
-        dragState = DragStates.Free;
-
+        if (StampSelected)
+        {
+            Vector3 spawnPos = new Vector3(mousePos.x, mousePos.y, -0.6f);
+            Instantiate(stampSprite, spawnPos, Quaternion.identity);
+            hasStamped = true;
+            dragState = DragStates.Free;
+        }
     }
 }
